@@ -2,17 +2,28 @@ import json
 import csv
 
 
-file = '/media/xianwei/E8E6-15AB/组会/zhong.json'
+sourcefile = '/media/xianwei/E8E6-15AB/组会/zhong.json'
+
+resultfile = open('result.csv', 'w')
 
 
-'''创建csv文件并生成head'''
-def create_csv(filename, file):
-    resultfile = open(filename, 'w')
-    head = generate_title(file)
+headdict = {'id':'编号',
+            'title':'标题',
+            'classify':'种类',
+            'infoType':'信息类型',
+            'province':'省份',
+            'city':'城市',
+            'content':'内容'}
+
+
+'''生成head'''
+def create_csv(sourcefile):
+
+    head = generate_title(sourcefile)
     writer = csv.writer(resultfile)
     writer.writerow(head)
 
-    return resultfile
+
 
 '''在这里读取一次文件，从而生成表头信息'''
 def generate_title(file):
@@ -27,29 +38,27 @@ def generate_title(file):
             print(e)
     return head
 
-'''读取文件'''
-def read_file(file):
-    pass
-
-'''一次读取一行信息'''
-def read_line(file):
-    pass
 
 '''在这里开始处理数据'''
 def write_flie(file):
-    try:
-        while True:
-            row = {}
-            line_data = file.readline()
-            if line_data:
-                data = json.loads(line_data)
-                row = data.valus()
-    except Exception as e:
-        print(e)
+    with open(file, 'r', encoding='utf-8') as f:
+        writer = csv.writer(resultfile)
+        try:
+            while True:
+                line_data = f.readline()
+                if line_data:
+                    data = json.loads(line_data)
+                    row = data.values()
+                    writer.writerow(row)
+                else:
+                    break
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
-    create_csv('result.csv',file)
+    create_csv(sourcefile)
+    write_flie(sourcefile)
 
 
 # with open(filename, 'r', encoding='utf-8') as f:
