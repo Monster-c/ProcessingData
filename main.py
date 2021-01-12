@@ -1,29 +1,28 @@
 import json
 import csv
 
-
+#数据导入
 sourcefile = '/media/xianwei/E8E6-15AB/组会/zhong.json'
 
 resultfile = open('result.csv', 'w')
 
-
-headdict = {'id':'编号',
-            'title':'标题',
-            'classify':'种类',
-            'infoType':'信息类型',
-            'province':'省份',
-            'city':'城市',
-            'content':'内容'}
+#contents = open('content.csv', 'w')
 
 
 '''生成head'''
 def create_csv(sourcefile):
 
     head = generate_title(sourcefile)
+    print(head)
+
     writer = csv.writer(resultfile)
     writer.writerow(head)
 
-
+    # content = list(head)
+    # title = content[9].split('4')
+    #print(title)
+    # writer = csv.writer(contents)
+    # writer.writerow(title)
 
 '''在这里读取一次文件，从而生成表头信息'''
 def generate_title(file):
@@ -38,18 +37,23 @@ def generate_title(file):
             print(e)
     return head
 
-
 '''在这里开始处理数据'''
 def write_flie(file):
     with open(file, 'r', encoding='utf-8') as f:
         writer = csv.writer(resultfile)
+        # writer = csv.writer(contents)
         try:
             while True:
                 line_data = f.readline()
                 if line_data:
                     data = json.loads(line_data)
-                    row = data.values()
-                    writer.writerow(row)
+                    data = list(data.values())
+                    writer.writerow(data)
+                    # row = data['content'].split('囧')#目的是将str转换为list
+                    # print(row)
+                    # print(type(row))
+                    # writer.writerow(row)
+                    # break
                 else:
                     break
         except Exception as e:
@@ -57,9 +61,9 @@ def write_flie(file):
 
 
 if __name__ == '__main__':
+
     create_csv(sourcefile)
     write_flie(sourcefile)
-
 
 # with open(filename, 'r', encoding='utf-8') as f:
 #     keys = []
